@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Pengumuman Kelulusan SMAN 1 Sawahlunto</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:white;
+}
+
+.container{
+  width:90%;
+  max-width:650px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(20px);
+  border-radius:20px;
+  padding:30px;
+  text-align:center;
+  box-shadow:0 15px 40px rgba(0,0,0,0.4);
+}
+
+h1{font-size:24px;}
+.subtitle{opacity:0.7;margin-bottom:10px;}
+
+#countdownBox{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin:20px 0;
+}
+
+.time-box{
+  background:rgba(255,255,255,0.1);
+  padding:15px;
+  border-radius:12px;
+  width:70px;
+}
+
+.time-box span{font-size:22px;font-weight:600;}
+.time-box small{font-size:12px;opacity:0.7;}
+
+.lock-text{color:#ffcc00;margin-top:10px;}
+
+input{
+  width:80%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  margin-top:15px;
+}
+
+button{
+  margin-top:10px;
+  padding:12px 25px;
+  border:none;
+  border-radius:10px;
+  background:#00c6ff;
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.hidden{display:none;}
+
+.result{
+  margin-top:20px;
+  padding:20px;
+  border-radius:15px;
+  background:rgba(255,255,255,0.1);
+}
+
+.lulus{color:#00ffae;font-size:22px;font-weight:600;}
+.tidak{color:#ff5c5c;font-size:22px;font-weight:600;}
+
+footer{margin-top:15px;font-size:12px;opacity:0.6;}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>Pengumuman Kelulusan</h1>
+  <div class="subtitle">SMAN 1 Sawahlunto • 2026</div>
+
+  <!-- COUNTDOWN -->
+  <div id="countdownBox">
+    <div class="time-box"><span id="days">0</span><small>Hari</small></div>
+    <div class="time-box"><span id="hours">0</span><small>Jam</small></div>
+    <div class="time-box"><span id="minutes">0</span><small>Menit</small></div>
+    <div class="time-box"><span id="seconds">0</span><small>Detik</small></div>
+  </div>
+
+  <div id="statusText" class="lock-text"></div>
+
+  <!-- FORM -->
+  <div id="form" class="hidden">
+    <input type="text" id="nisn" placeholder="Masukkan NISN">
+    <br>
+    <button onclick="cek()">Cek Kelulusan</button>
+  </div>
+
+  <!-- HASIL -->
+  <div id="hasil"></div>
+
+  <footer>© 2026 SMAN 1 Sawahlunto</footer>
+</div>
+
+<audio id="sound" src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3"></audio>
+
+<script>
+
+const target = new Date("2026-05-04T22:00:00+07:00").getTime();
+
+let timeOffset = 0; // selisih waktu server
+
+// 🔥 ambil waktu server SEKALI
+async function syncTime(){
+  try{
+    const res = await fetch("https://timeapi.io/api/Time/current/zone?timeZone=Asia/Jakarta");
+    const data = await res.json();
+
+    const serverTime = new Date(data.dateTime).getTime();
+    const localTime = new Date().getTime();
+
+    timeOffset = serverTime - localTime;
+
+  }catch{
+    // ❗ kalau gagal → pakai waktu lokal tapi kasih warning
+    document.getElementById("statusText").innerHTML =
+      "⚠️ Mode offline (menggunakan waktu perangkat)";
+  }
+}
+
+// ⏳ UPDATE COUNTDOWN
+function update(){
+  const now = new Date().getTime() + timeOffset;
+
+  const form = document.getElementById("form");
+  const status = document.getElementById("statusText");
+
+  const diff = target - now;
+
+  if(diff <= 0){
+    document.getElementById("countdownBox").style.display="none";
+    status.innerHTML = "🔓 Pengumuman sudah dibuka";
+    form.classList.remove("hidden");
+    return;
+  }
+
+  form.classList.add("hidden");
+
+  const d = Math.floor(diff/(1000*60*60*24));
+  const h = Math.floor((diff/(1000*60*60))%24);
+  const m = Math.floor((diff/(1000*60))%60);
+  const s = Math.floor((diff/1000)%60);
+
+  document.getElementById("days").innerText = d;
+  document.getElementById("hours").innerText = h;
+  document.getElementById("minutes").innerText = m;
+  document.getElementById("seconds").innerText = s;
+
+  status.innerHTML = "🔒 Pengumuman belum dibuka";
+}
+
+// 🚀 INIT
+syncTime();
+setInterval(update,1000);
+
+</script>
+
+</body>
+</html>
