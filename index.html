@@ -2,6 +2,8 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Pengumuman Kelulusan SMAN 1 Sawahlunto</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
@@ -72,9 +74,6 @@ button{
 
 .hidden{display:none;}
 
-footer{margin-top:15px;font-size:12px;opacity:0.6;}
-
-/* ===== SNBP STYLE ===== */
 .snbp-result{
   margin-top:20px;
   border-radius:15px;
@@ -95,30 +94,13 @@ footer{margin-top:15px;font-size:12px;opacity:0.6;}
 .snbp-body{
   padding:20px;
   display:flex;
-  justify-content:space-between;
-  gap:15px;
   flex-wrap:wrap;
 }
 
 .snbp-left{flex:1;}
 
-.snbp-name{
-  font-size:22px;
-  font-weight:600;
-  margin:10px 0;
-}
-
-.snbp-sub{
-  font-size:13px;
-  opacity:0.8;
-  margin-bottom:10px;
-}
-
-.snbp-info{
-  font-size:13px;
-  margin:4px 0;
-  opacity:0.85;
-}
+.snbp-name{font-size:22px;font-weight:600;margin:10px 0;}
+.snbp-info{font-size:13px;margin:4px 0;opacity:0.85;}
 
 .snbp-box{
   background:white;
@@ -129,24 +111,79 @@ footer{margin-top:15px;font-size:12px;opacity:0.6;}
   margin-top:10px;
 }
 
-.snbp-status{
-  margin-top:15px;
-  font-size:18px;
-  font-weight:600;
-}
-
+.snbp-status{margin-top:15px;font-size:18px;font-weight:600;}
 .lulus{color:#00ffae;}
 .tidak{color:#ff5c5c;}
+
+@media (max-width:600px){
+  body{display:block;}
+  .container{width:100%;max-width:100%;min-height:100vh;border-radius:0;}
+  input,button{width:100%;}
+  .snbp-body{flex-direction:column;}
+}
+
+.rules{
+  margin-top:20px;
+  text-align:left;
+  background:rgba(255,255,255,0.1);
+  padding:15px;
+  border-radius:12px;
+  font-size:13px;
+  line-height:1.6;
+}
+
+.rules h3{
+  margin-bottom:10px;
+  font-size:16px;
+  color:#00c6ff;
+}
+
+.rules ul{
+  padding-left:18px;
+}
+
+.rules li{
+  margin-bottom:6px;
+}
 </style>
 </head>
 
 <body>
 
 <div class="container">
+
+  <!-- 🔥 LOGO LINGKARAN PUTIH -->
+  <div style="display:flex;justify-content:center;margin-bottom:10px;">
+    <div style="
+      width:110px;
+      height:110px;
+      background:white;
+      border-radius:50%;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      box-shadow:0 8px 20px rgba(0,0,0,0.3);
+    ">
+      <img src="https://upload.wikimedia.org/wikipedia/id/d/d0/Logo_SMA_Negeri_1_Sawahlunto.png"
+      alt="Logo SMAN 1 Sawahlunto"
+      style="width:75px;height:auto;">
+    </div>
+  </div>
+
   <h1>Pengumuman Kelulusan</h1>
   <div class="subtitle">SMAN 1 Sawahlunto • 2026</div>
 
-  <!-- COUNTDOWN -->
+  <div class="rules">
+    <h3>Ketentuan Kelulusan</h3>
+    <ul>
+      <li>Tidak melakukan coret-coret seragam atau atribut sekolah</li>
+      <li>Tidak melakukan konvoi atau arak-arakan kelulusan</li>
+      <li>Tetap menjaga nama baik sekolah setelah kelulusan</li>
+      <li>Tidak melakukan tindakan yang mengganggu ketertiban umum</li>
+      <li>Menggunakan momen kelulusan secara bijak dan positif</li>
+    </ul>
+  </div>
+
   <div id="countdownBox">
     <div class="time-box"><span id="days">0</span><small>Hari</small></div>
     <div class="time-box"><span id="hours">0</span><small>Jam</small></div>
@@ -156,55 +193,43 @@ footer{margin-top:15px;font-size:12px;opacity:0.6;}
 
   <div id="statusText" class="lock-text"></div>
 
-  <!-- FORM -->
   <div id="form" class="hidden">
     <input type="text" id="nisn" placeholder="Masukkan NISN">
     <br>
     <button onclick="cek()">Cek Kelulusan</button>
   </div>
 
-  <!-- HASIL -->
   <div id="hasil"></div>
 
-  <footer>© 2026 SMAN 1 Sawahlunto</footer>
 </div>
-
-<audio id="sound" src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3"></audio>
 
 <script>
 
-// ⏰ WAKTU
-const target = new Date("2026-05-01T22:00:00+07:00").getTime();
+const target = new Date("2026-05-01T19:22:00+07:00").getTime();
 
-// COUNTDOWN
 function update(){
   const now = new Date().getTime();
   const diff = target - now;
 
-  const form = document.getElementById("form");
-
   if(diff <= 0){
     document.getElementById("countdownBox").style.display="none";
-    document.getElementById("statusText").innerHTML="🔓 Pengumuman sudah dibuka";
-    form.classList.remove("hidden");
+    document.getElementById("statusText").innerHTML="🔓 Sudah dibuka";
+    document.getElementById("form").classList.remove("hidden");
     return;
   }
 
-  form.classList.add("hidden");
+  document.getElementById("form").classList.add("hidden");
 
   document.getElementById("days").innerText = Math.floor(diff/(1000*60*60*24));
   document.getElementById("hours").innerText = Math.floor((diff/(1000*60*60))%24);
   document.getElementById("minutes").innerText = Math.floor((diff/(1000*60))%60);
   document.getElementById("seconds").innerText = Math.floor((diff/1000)%60);
-
-  document.getElementById("statusText").innerHTML="🔒 Belum dibuka";
 }
 
 setInterval(update,1000);
 
-// DATA SISWA
 const dataSiswa = [
-  {nisn:"001", nama:"JHODY SEPTIAN PRIADI", kelas:"X E1", status:"TIDAK LULUS"},
+    {nisn:"001", nama:"JHODY SEPTIAN PRIADI", kelas:"X E1", status:"TIDAK LULUS"},
   {nisn:"0089719199", nama:"ABIMAYU LANTANG DINANBANA", kelas:"XII F1+", status:"LULUS"},
   {nisn:"0074130017", nama:"AHMAD GHIFAR", kelas:"XII F1+", status:"LULUS"},
   {nisn:"0089063463", nama:"AKHTAR GAZALA RAZALDI", kelas:"XII F1+", status:"LULUS"},
@@ -443,14 +468,13 @@ const dataSiswa = [
   {nisn:"0084396060", nama:"WINDI DEA PUTRI", kelas:"XII F7+", status:"LULUS"},
 ];
 
-// CEK
 function cek(){
   const nisn = document.getElementById("nisn").value.trim();
   const siswa = dataSiswa.find(s => s.nisn === nisn);
   const hasil = document.getElementById("hasil");
 
   if(!siswa){
-    hasil.innerHTML = `<div style="margin-top:20px;">Data tidak ditemukan</div>`;
+    hasil.innerHTML = `<div>Data tidak ditemukan</div>`;
     return;
   }
 
@@ -458,57 +482,27 @@ function cek(){
     ? "Silakan melakukan pengambilan Surat Keterangan Lulus di sekolah sesuai jadwal."
     : "Tetap semangat. Silakan konsultasi ke pihak sekolah untuk informasi lebih lanjut.";
 
-  if(siswa.status === "LULUS"){
-    document.getElementById("sound").play();
-    confetti();
-  }
-
   hasil.innerHTML = `
   <div class="snbp-result">
-
     <div class="snbp-header">
-      ${siswa.status === "LULUS" ? "SELAMAT!" : "INFORMASI"} ANDA DINYATAKAN ${siswa.status}
+      ${siswa.status === "LULUS" ? "SELAMAT!" : ""} ANDA DINYATAKAN ${siswa.status}
     </div>
 
     <div class="snbp-body">
-
       <div class="snbp-left">
-        <div class="snbp-info">NISN ${siswa.nisn}</div>
-
+        <div class="snbp-info">NISN: ${siswa.nisn}</div>
         <div class="snbp-name">${siswa.nama}</div>
+        <div class="snbp-info">${siswa.kelas}</div>
 
-        <div class="snbp-class">${siswa.kelas}</div>
-
-        <div class="snbp-status ${siswa.status === "LULUS" ? "lulus" : "tidak"}">
+        <div class="snbp-status ${siswa.status==="LULUS"?"lulus":"tidak"}">
           ${siswa.status}
         </div>
 
-        <div class="snbp-box">
-          ${pesan}
-        </div>
+        <div class="snbp-box">${pesan}</div>
       </div>
-
     </div>
   </div>
   `;
-}
-
-// CONFETTI
-function confetti(){
-  for(let i=0;i<80;i++){
-    let c=document.createElement("div");
-    c.style.position="fixed";
-    c.style.width="5px";
-    c.style.height="5px";
-    c.style.background="white";
-    c.style.top="0";
-    c.style.left=Math.random()*window.innerWidth+"px";
-    c.style.transition="2s";
-    document.body.appendChild(c);
-
-    setTimeout(()=>{c.style.top="100vh";},10);
-    setTimeout(()=>c.remove(),2000);
-  }
 }
 
 </script>
