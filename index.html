@@ -224,6 +224,8 @@ function update(){
   document.getElementById("hours").innerText = Math.floor((diff/(1000*60*60))%24);
   document.getElementById("minutes").innerText = Math.floor((diff/(1000*60))%60);
   document.getElementById("seconds").innerText = Math.floor((diff/1000)%60);
+
+  document.getElementById("statusText").innerHTML="🔒 Belum dibuka";
 }
 
 setInterval(update,1000);
